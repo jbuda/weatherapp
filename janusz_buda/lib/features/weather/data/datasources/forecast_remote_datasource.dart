@@ -22,7 +22,7 @@ class ForecastRemoteDatasourceImpl implements ForecastRemoteDatasource {
 
   @override
   Future<ForecastModel> getCurrentForecast() async {
-    final url = Uri.parse('${baseUrl}weather').replace(query: 'q=$city&appid=$key');
+    final url = Uri.parse('${baseUrl}weather').replace(query: 'q=$city&appid=$key&units=metric');
     final http.Response response = await client.get(url);
     final decoded = json.decode(response.body) as Map<String, dynamic>;
 
