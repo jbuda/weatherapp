@@ -6,10 +6,12 @@ import 'package:weatherapp/features/weather/presentation/widgets/temperature_ran
 
 class FiveDayForecast extends StatelessWidget {
   final List<FiveDay>? forecast;
+  final String error;
 
   const FiveDayForecast({
     Key? key,
     this.forecast,
+    required this.error,
   }) : super(key: key);
 
   @override
@@ -17,13 +19,30 @@ class FiveDayForecast extends StatelessWidget {
     return Container(
       color: Colors.grey.shade100,
       height: 100,
-      child: ListView(
+      child: _container(),
+    );
+  }
+
+  Widget _container() {
+    if (error == "") {
+      return ListView(
         scrollDirection: Axis.horizontal,
         children: (forecast != null)
-          ? forecast!.map((FiveDay day) => _day(day)).toList()
-          : <Widget>[Container()],
-      ),
-    );
+            ? forecast!.map((FiveDay day) => _day(day)).toList()
+            : <Widget>[Container()],
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          error,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.red
+          ),
+        ),
+      );
+    }
   }
 
   Widget _day(FiveDay day) =>

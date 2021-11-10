@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:weatherapp/core/exceptions.dart';
 
 import 'package:weatherapp/features/weather/domain/entities/entities.dart';
 import 'package:weatherapp/features/weather/domain/usecases/get_current_weather.dart';
@@ -16,6 +17,8 @@ class WeatherScreenViewModel with ChangeNotifier {
   Forecast? current;
   List<FiveDay>? forecast;
   String dateTime = "";
+  String currentError = "";
+  String forecastError = "";
 
   WeatherScreenViewModel({
     required GetCurrentWeather getCurrentWeather,
@@ -24,15 +27,23 @@ class WeatherScreenViewModel with ChangeNotifier {
   }) : _getCurrentWeather = getCurrentWeather, _getFiveDayForecast = getFiveDayForecast, _mapUrl = mapUrl;
 
   Future<void> fetchWeather() async {
-    if (current == null) {
+    if (current == null && currentError == "") {
 
-      current = await _getCurrentWeather();
+      try {
+        current = await _getCurrentWeather();
+      } on AppException catch(e)  {
+        currentError = e.toString();
+      }
 
-      final forecasts = await _getFiveDayForecast();
+      try {
+        final forecasts = await _getFiveDayForecast();
 
-      forecast = forecasts
-          .where((item) => _filterMiddayForecasts(item.dt))
-          .map((item) => FiveDay(day: _getDayOfWeek(item.dt), weather: item.weather, main: item.main)).toList();
+        forecast = forecasts
+            .where((item) => _filterMiddayForecasts(item.dt))
+            .map((item) => FiveDay(day: _getDayOfWeek(item.dt), weather: item.weather, main: item.main)).toList();
+      } on AppException catch(e)  {
+        forecastError = e.toString();
+      }
 
       dateTime = _formatLastUpdate(current?.dt);
 
@@ -42,6 +53,7 @@ class WeatherScreenViewModel with ChangeNotifier {
 
   Future<void> resetWeather() async {
     current = null;
+    currentError = "";
 
     notifyListeners();
   }

@@ -6,10 +6,12 @@ import 'package:weatherapp/features/weather/presentation/viewmodels/weather_scre
 
 class TopBar extends StatelessWidget {
   final String lastUpdate;
+  final String error;
 
   const TopBar({
     Key? key,
     required this.lastUpdate,
+    required this.error,
   }) : super(key: key);
 
   @override
@@ -24,13 +26,7 @@ class TopBar extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(lastUpdate),
-                const Text(
-                  "London, UK",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ],
+              children: _information(),
             ),
           ),
           TopBarButton(icon: Icons.refresh, onPressed: () => viewModelProvider.resetWeather()),
@@ -38,5 +34,27 @@ class TopBar extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  List<Widget> _information() {
+    if (error != "") {
+      return <Widget>[
+        Text(
+          error,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.red
+          ),
+        ),
+      ];
+    } else {
+      return <Widget>[
+        Text(lastUpdate),
+        const Text(
+          "London, UK",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ];
+    }
   }
 }

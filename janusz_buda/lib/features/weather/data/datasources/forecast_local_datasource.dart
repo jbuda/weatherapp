@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:weatherapp/features/weather/data/models/forecast_model.dart';
-
+import 'package:weatherapp/core/exceptions.dart';
 
 abstract class ForecastLocalDatasource {
   Future<ForecastModel> getLastCurrentForecast();
@@ -20,9 +20,13 @@ class ForecastLocalDatasourceImpl implements ForecastLocalDatasource {
   @override
   Future<ForecastModel> getLastCurrentForecast() {
     final jsonString = sharedPreferences.getString(cachedCurrentForecastKey);
-    final decoded = json.decode(jsonString!) as Map<String, dynamic>;
 
-    return Future.value(ForecastModel.fromJson(decoded));
+    if (jsonString != null) {
+      final decoded = json.decode(jsonString) as Map<String, dynamic>;
+      return Future.value(ForecastModel.fromJson(decoded));
+    } else {
+      throw CacheException();
+    }
   }
 
   @override

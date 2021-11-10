@@ -19,7 +19,7 @@ class WeatherScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          TopBar(lastUpdate: viewModelProvider.dateTime),
+          TopBar(lastUpdate: viewModelProvider.dateTime, error: viewModelProvider.currentError),
           Expanded(
             child: Align(
               alignment: Alignment.bottomLeft,
@@ -37,7 +37,7 @@ class WeatherScreen extends StatelessWidget {
               )
             ),
           ),
-          FiveDayForecast(forecast: viewModelProvider.forecast),
+          FiveDayForecast(forecast: viewModelProvider.forecast, error: viewModelProvider.forecastError),
         ],
       ),
     );
