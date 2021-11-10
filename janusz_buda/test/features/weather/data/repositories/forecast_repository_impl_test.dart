@@ -26,11 +26,12 @@ void main() {
     localDatasourceMock = LocalDatasourceMock();
     networkMock = NetworkMock();
 
-
     sut = ForecastRepositoryImpl(remoteDatasource: remoteDatasourceMock, localDatasource: localDatasourceMock, network: networkMock);
   });
 
   test('should return remote data when request is successful', () async {
+    when(() => networkMock.isConnected()).thenAnswer((_) async => true);
+    when(() => localDatasourceMock.cacheCurrentForecast(tm.forecastModel)).thenAnswer((_) => Future.value());
     when(() => remoteDatasourceMock.getCurrentForecast()).thenAnswer((_) async => tm.forecastModel);
 
     final result = await sut.getCurrentForecast();

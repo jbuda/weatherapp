@@ -29,7 +29,7 @@ void main() {
         providers: [
           ChangeNotifierProvider.value(value: viewModel),
         ],
-        child: const Directionality(textDirection: TextDirection.ltr, child: TopBar(lastUpdate: ""))),
+        child: const Directionality(textDirection: TextDirection.ltr, child: TopBar(lastUpdate: "", error: ""))),
     );
 
     final iconTypeFinder = find.byType(TopBarButton);
