@@ -1,6 +1,11 @@
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:connectivity/connectivity.dart';
+
+import 'package:weatherapp/core/network.dart';
 
 import 'package:weatherapp/features/weather/data/datasources/forecast_remote_datasource.dart';
+import 'package:weatherapp/features/weather/data/datasources/forecast_local_datasource.dart';
 import 'package:weatherapp/features/weather/data/repositories/forecast_repository_impl.dart';
 import 'package:weatherapp/features/weather/domain/usecases/get_current_weather.dart';
 import 'package:weatherapp/features/weather/domain/usecases/get_five_day_forecast.dart';
@@ -12,15 +17,24 @@ const String key = "be257b28a7ece664a1abeffeb139078a";
 const String city = "London,uk";
 const String mapUrl = "https://openweathermap.org/weathermap?basemap=map&cities=false&layer=temperature&lat=51&lon=0&zoom=10";
 
-// datasources
-final forecastRemoteDatasource = ForecastRemoteDatasourceImpl(baseUrl: baseUrl, key: key, city: city, client: http.Client());
+Future<WeatherScreenViewModel> init() async {
+  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  final NetworkImpl networkImpl = NetworkImpl(Connectivity());
 
-// repository
-final forecastRepository = ForecastRepositoryImpl(remoteDatasource: forecastRemoteDatasource);
+  // datasources
+  final forecastRemoteDatasource = ForecastRemoteDatasourceImpl(baseUrl: baseUrl, key: key, city: city, client: http.Client());
+  final forecastLocalDatasource = ForecastLocalDatasourceImpl(sharedPreferences: sharedPreferences);
 
-// usecases
-final getCurrentWeatherUseCase = GetCurrentWeather(repository: forecastRepository);
-final getFiveDayForecast = GetFiveDayForecast(repository: forecastRepository);
+  // repository
+  final forecastRepository = ForecastRepositoryImpl(remoteDatasource: forecastRemoteDatasource, localDatasource: forecastLocalDatasource, network: networkImpl);
 
-// viewmodel
-final weatherScreenViewModel = WeatherScreenViewModel(getCurrentWeather: getCurrentWeatherUseCase, getFiveDayForecast: getFiveDayForecast, mapUrl: mapUrl);
+  // usecases
+  final getCurrentWeatherUseCase = GetCurrentWeather(repository: forecastRepository);
+  final getFiveDayForecast = GetFiveDayForecast(repository: forecastRepository);
+
+  // viewmodel
+  final weatherScreenViewModel = WeatherScreenViewModel(getCurrentWeather: getCurrentWeatherUseCase, getFiveDayForecast: getFiveDayForecast, mapUrl: mapUrl);
+
+  return weatherScreenViewModel;
+}
+

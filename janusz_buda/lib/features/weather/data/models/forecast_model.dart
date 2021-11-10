@@ -4,7 +4,7 @@ import 'package:weatherapp/features/weather/data/models/models.dart';
 class ForecastModel extends Forecast {
   const ForecastModel({
     required int dt,
-    required Weather weather,
+    required WeatherModel weather,
     required Main main,
   }) : super(
     dt: dt,
@@ -18,4 +18,20 @@ class ForecastModel extends Forecast {
         weather: WeatherModel.fromJson(json["weather"] as List<dynamic>),
         main: MainModel.fromJson(json["main"] as Map<String, dynamic>),
       );
+
+  Map<String, dynamic> toJson() =>
+      <String, dynamic>{
+        "dt": dt,
+        "weather": [
+          <String, dynamic>{
+            "description": weather.description,
+          }
+        ],
+        "main": <String, dynamic>{
+          "temp": main.temp,
+          "temp_min": main.tempMin,
+          "temp_max": main.tempMax,
+          "humidity": main.humidity
+        },
+      };
 }
