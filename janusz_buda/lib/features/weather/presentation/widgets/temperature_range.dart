@@ -16,8 +16,9 @@ class TemperatureRange extends StatelessWidget {
   Widget build(BuildContext context) =>
       Text(
           "$prefix ${value?.toStringAsFixed(0)}\u2103",
+          textDirection: TextDirection.ltr,
           style: TextStyle(
             fontSize: size,
-          )
+          ),
       );
 }

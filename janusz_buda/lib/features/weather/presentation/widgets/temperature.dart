@@ -12,6 +12,7 @@ class Temperature extends StatelessWidget {
   Widget build(BuildContext context) =>
       Text(
           "${value?.toStringAsFixed(0)}\u2103",
+          textDirection: TextDirection.ltr,
           style: const TextStyle(
             fontWeight: FontWeight.normal,
             fontSize: 28,
