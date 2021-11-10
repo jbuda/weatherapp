@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import 'package:weatherapp/features/weather/domain/entities/entities.dart';
@@ -8,6 +9,9 @@ import 'package:weatherapp/features/weather/domain/usecases/get_five_day_forecas
 class WeatherScreenViewModel with ChangeNotifier {
   final GetCurrentWeather _getCurrentWeather;
   final GetFiveDayForecast _getFiveDayForecast;
+  final String _mapUrl;
+
+  final platform = const MethodChannel('webview');
 
   Forecast? current;
   List<FiveDay>? forecast;
@@ -15,8 +19,9 @@ class WeatherScreenViewModel with ChangeNotifier {
 
   WeatherScreenViewModel({
     required GetCurrentWeather getCurrentWeather,
-    required GetFiveDayForecast getFiveDayForecast
-  }) : _getCurrentWeather = getCurrentWeather, _getFiveDayForecast = getFiveDayForecast;
+    required GetFiveDayForecast getFiveDayForecast,
+    required String mapUrl,
+  }) : _getCurrentWeather = getCurrentWeather, _getFiveDayForecast = getFiveDayForecast, _mapUrl = mapUrl;
 
   Future<void> fetchWeather() async {
     if (current == null) {
@@ -39,6 +44,16 @@ class WeatherScreenViewModel with ChangeNotifier {
     current = null;
 
     notifyListeners();
+  }
+
+  Future<void> openNativeView() async {
+    try {
+      final params = <String, dynamic>{"url": _mapUrl};
+
+      await platform.invokeMethod<String>('startNativeView', params);
+    } on PlatformException catch(e) {
+      print(e.message);
+    }
   }
 
   String _formatLastUpdate(int? timestamp) {

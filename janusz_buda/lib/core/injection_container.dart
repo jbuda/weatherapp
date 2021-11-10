@@ -10,6 +10,7 @@ import 'package:weatherapp/features/weather/presentation/viewmodels/weather_scre
 const String baseUrl = "https://api.openweathermap.org/data/2.5/";
 const String key = "be257b28a7ece664a1abeffeb139078a";
 const String city = "London,uk";
+const String mapUrl = "https://openweathermap.org/weathermap?basemap=map&cities=false&layer=temperature&lat=51&lon=0&zoom=10";
 
 // datasources
 final forecastRemoteDatasource = ForecastRemoteDatasourceImpl(baseUrl: baseUrl, key: key, city: city, client: http.Client());
@@ -22,4 +23,4 @@ final getCurrentWeatherUseCase = GetCurrentWeather(repository: forecastRepositor
 final getFiveDayForecast = GetFiveDayForecast(repository: forecastRepository);
 
 // viewmodel
-final weatherScreenViewModel = WeatherScreenViewModel(getCurrentWeather: getCurrentWeatherUseCase, getFiveDayForecast: getFiveDayForecast);
+final weatherScreenViewModel = WeatherScreenViewModel(getCurrentWeather: getCurrentWeatherUseCase, getFiveDayForecast: getFiveDayForecast, mapUrl: mapUrl);

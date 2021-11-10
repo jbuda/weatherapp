@@ -34,7 +34,7 @@ class TopBar extends StatelessWidget {
             ),
           ),
           TopBarButton(icon: Icons.refresh, onPressed: () => viewModelProvider.resetWeather()),
-          TopBarButton(icon: Icons.map, onPressed: () => print("hello there map")),
+          TopBarButton(icon: Icons.map, onPressed: () => viewModelProvider.openNativeView()),
         ],
       ),
     );
