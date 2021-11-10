@@ -30,6 +30,13 @@ class ForecastRepositoryImpl implements ForecastRepository {
 
   @override
   Future<List<Forecast>> getFiveDayForecast() async {
-    return await remoteDatasource.getFiveDayForecast();
+    if (await network.isConnected() == false) {
+      final forecastModel = await remoteDatasource.getFiveDayForecast();
+      localDatasource.cacheFiveDayForecast(forecastModel);
+
+      return forecastModel;
+    } else {
+      return await localDatasource.getLastFiveDayForecast();
+    }
   }
 }
