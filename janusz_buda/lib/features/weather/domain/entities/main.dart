@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 
 class Main extends Equatable {
-  final double temp;
-  final double tempMin;
-  final double tempMax;
-  final int humidity;
+  final num temp;
+  final num tempMin;
+  final num tempMax;
+  final num humidity;
 
   const Main({
     required this.temp,

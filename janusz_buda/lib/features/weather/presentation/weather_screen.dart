@@ -12,21 +12,32 @@ class WeatherScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Provider.of<WeatherScreenViewModel>(context).fetchWeather();
 
-    final current = Provider.of<WeatherScreenViewModel>(context).current;
-    final dateTime = Provider.of<WeatherScreenViewModel>(context).dateTime;
+    final viewModelProvider = Provider.of<WeatherScreenViewModel>(context);
 
     return Container(
       color: Colors.white,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          TopBar(lastUpdate: dateTime),
+          TopBar(lastUpdate: viewModelProvider.dateTime),
           Expanded(
             child: Align(
               alignment: Alignment.bottomLeft,
-              child: CurrentWeather(current: current),
+              child: CurrentWeather(current: viewModelProvider.current),
             ),
           ),
-          const FiveDayForecast(),
+          Container(
+            color: Colors.grey.shade100,
+            padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+            child: const Text(
+              "5 Day Forecast",
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              )
+            ),
+          ),
+          FiveDayForecast(forecast: viewModelProvider.forecast),
         ],
       ),
     );

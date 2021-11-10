@@ -13,4 +13,9 @@ class ForecastRepositoryImpl implements ForecastRepository {
   Future<Forecast> getCurrentForecast() async {
     return await remoteDatasource.getCurrentForecast();
   }
+
+  @override
+  Future<List<Forecast>> getFiveDayForecast() async {
+    return await remoteDatasource.getFiveDayForecast();
+  }
 }

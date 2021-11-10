@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weatherapp/features/weather/domain/entities/entities.dart';
+import 'package:weatherapp/features/weather/presentation/widgets/temperature_range.dart';
 
 class CurrentWeather extends StatelessWidget {
   final Forecast? current;
@@ -12,7 +13,7 @@ class CurrentWeather extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 24.0),
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -23,8 +24,8 @@ class CurrentWeather extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    _rangeTemperature("\u25b2", current?.main.tempMax),
-                    _rangeTemperature("\u25bc", current?.main.tempMin),
+                    TemperatureRange(prefix: "\u25b2", value: current?.main.tempMax, size: 20),
+                    TemperatureRange(prefix: "\u25bc", value: current?.main.tempMin, size: 20),
                   ],
                 )
               ],
@@ -54,7 +55,7 @@ class CurrentWeather extends StatelessWidget {
     );
   }
 
-  Widget _currentTemperature(double? temperature) =>
+  Widget _currentTemperature(num? temperature) =>
       Expanded(
         child: Text.rich(
           TextSpan(
@@ -77,11 +78,5 @@ class CurrentWeather extends StatelessWidget {
         ),
       );
 
-  Widget _rangeTemperature(String prefix, double? temperature) =>
-      Text(
-          "$prefix ${temperature?.toStringAsFixed(0)}\u2103",
-          style: const TextStyle(
-            fontSize: 20,
-          )
-      );
+
 }

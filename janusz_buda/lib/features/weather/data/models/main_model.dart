@@ -2,10 +2,10 @@ import 'package:weatherapp/features/weather/domain/entities/entities.dart';
 
 class MainModel extends Main {
   const MainModel({
-    required double temp,
-    required double tempMin,
-    required double tempMax,
-    required int humidity,
+    required num temp,
+    required num tempMin,
+    required num tempMax,
+    required num humidity,
   }) : super(
     temp: temp,
     tempMin: tempMin,
@@ -15,9 +15,9 @@ class MainModel extends Main {
 
   factory MainModel.fromJson(Map<String, dynamic> json) =>
       MainModel(
-        temp: json['temp'] as double,
-        tempMin: json["temp_min"] as double,
-        tempMax: json["temp_max"] as double,
-        humidity: json["humidity"] as int,
+        temp: json['temp'] as num,
+        tempMin: json["temp_min"] as num,
+        tempMax: json["temp_max"] as num,
+        humidity: json["humidity"] as num,
       );
 }
