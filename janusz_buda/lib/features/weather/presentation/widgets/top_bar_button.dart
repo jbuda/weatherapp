@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class TopBarButton extends StatelessWidget {
   final IconData icon;
-  final Function? onPressed;
+  final Function onPressed;
 
   const TopBarButton({
     Key? key,
@@ -13,7 +13,7 @@ class TopBarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       TextButton(
-        onPressed: () => onPressed,
+        onPressed: () => onPressed(),
         child: Icon(icon),
         style: TextButton.styleFrom(
           primary: Colors.black,

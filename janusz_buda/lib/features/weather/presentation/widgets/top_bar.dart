@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:weatherapp/features/weather/presentation/widgets/top_bar_button.dart';
+import 'package:weatherapp/features/weather/presentation/viewmodels/weather_screen_viewmodel.dart';
 
 class TopBar extends StatelessWidget {
   final String lastUpdate;
@@ -11,6 +14,8 @@ class TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final viewModelProvider = Provider.of<WeatherScreenViewModel>(context);
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -28,8 +33,8 @@ class TopBar extends StatelessWidget {
               ],
             ),
           ),
-          const TopBarButton(icon: Icons.refresh, onPressed: null),
-          const TopBarButton(icon: Icons.map, onPressed: null),
+          TopBarButton(icon: Icons.refresh, onPressed: () => viewModelProvider.resetWeather()),
+          TopBarButton(icon: Icons.map, onPressed: () => print("hello there map")),
         ],
       ),
     );

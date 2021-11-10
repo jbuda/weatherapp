@@ -35,6 +35,12 @@ class WeatherScreenViewModel with ChangeNotifier {
     }
   }
 
+  Future<void> resetWeather() async {
+    current = null;
+
+    notifyListeners();
+  }
+
   String _formatLastUpdate(int? timestamp) {
     if (timestamp != null) {
       final dt = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
