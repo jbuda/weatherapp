@@ -55,7 +55,7 @@ class MainActivity: FlutterActivity() {
         layout.addView(button)
 
         provideFlutterEngine(this)?.let { GeneratedPluginRegistrant.registerWith(it) }
-        MethodChannel(flutterEngine?.dartExecutor,CHANNEL).setMethodCallHandler(
+        MethodChannel(flutterEngine!!.dartExecutor.binaryMessenger,CHANNEL).setMethodCallHandler(
                 object : MethodCallHandler {
                     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
                         if (call.method.equals("startNativeView")) {
