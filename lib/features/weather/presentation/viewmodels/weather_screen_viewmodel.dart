@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:weatherapp/core/exceptions.dart';
-
 import 'package:weatherapp/features/weather/domain/entities/entities.dart';
 import 'package:weatherapp/features/weather/domain/usecases/get_current_weather.dart';
 import 'package:weatherapp/features/weather/domain/usecases/get_five_day_forecast.dart';
@@ -24,14 +23,15 @@ class WeatherScreenViewModel with ChangeNotifier {
     required GetCurrentWeather getCurrentWeather,
     required GetFiveDayForecast getFiveDayForecast,
     required String mapUrl,
-  }) : _getCurrentWeather = getCurrentWeather, _getFiveDayForecast = getFiveDayForecast, _mapUrl = mapUrl;
+  })  : _getCurrentWeather = getCurrentWeather,
+        _getFiveDayForecast = getFiveDayForecast,
+        _mapUrl = mapUrl;
 
   Future<void> fetchWeather() async {
     if (current == null && currentError == "") {
-
       try {
         current = await _getCurrentWeather();
-      } on AppException catch(e)  {
+      } on AppException catch (e) {
         currentError = e.toString();
       }
 
@@ -40,8 +40,12 @@ class WeatherScreenViewModel with ChangeNotifier {
 
         forecast = forecasts
             .where((item) => _filterMiddayForecasts(item.dt))
-            .map((item) => FiveDay(day: _getDayOfWeek(item.dt), weather: item.weather, main: item.main)).toList();
-      } on AppException catch(e)  {
+            .map((item) => FiveDay(
+                day: _getDayOfWeek(item.dt),
+                weather: item.weather,
+                main: item.main))
+            .toList();
+      } on AppException catch (e) {
         forecastError = e.toString();
       }
 
@@ -63,7 +67,7 @@ class WeatherScreenViewModel with ChangeNotifier {
       final params = <String, dynamic>{"url": _mapUrl};
 
       await platform.invokeMethod<String>('startNativeView', params);
-    } on PlatformException catch(e) {
+    } on PlatformException catch (e) {
       print(e.message);
     }
   }
@@ -80,7 +84,8 @@ class WeatherScreenViewModel with ChangeNotifier {
   bool _filterMiddayForecasts(int? timestamp) {
     if (timestamp != null) {
       final dt = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-      return DateFormat('HH').format(dt) == "12";
+      final hour = DateFormat('HH').format(dt);
+      return ["12", "13"].contains(hour);
     }
 
     return false;
@@ -90,5 +95,4 @@ class WeatherScreenViewModel with ChangeNotifier {
     final dt = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
     return DateFormat('EEE').format(dt).toString();
   }
-
 }

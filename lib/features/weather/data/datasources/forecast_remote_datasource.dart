@@ -1,7 +1,7 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:weatherapp/core/exceptions.dart';
-
 import 'package:weatherapp/features/weather/data/models/forecast_model.dart';
 
 abstract class ForecastRemoteDatasource {
@@ -24,7 +24,8 @@ class ForecastRemoteDatasourceImpl implements ForecastRemoteDatasource {
 
   @override
   Future<ForecastModel> getCurrentForecast() async {
-    final url = Uri.parse('${baseUrl}weather').replace(query: 'q=$city&appid=$key&units=metric');
+    final url = Uri.parse('${baseUrl}weather')
+        .replace(query: 'q=$city&appid=$key&units=metric');
     final http.Response response = await client.get(url);
 
     if (response.statusCode == 200) {
@@ -41,7 +42,8 @@ class ForecastRemoteDatasourceImpl implements ForecastRemoteDatasource {
 
   @override
   Future<List<ForecastModel>> getFiveDayForecast() async {
-    final url = Uri.parse('${baseUrl}forecast').replace(query: 'q=$city&appid=$key&units=metric');
+    final url = Uri.parse('${baseUrl}forecast')
+        .replace(query: 'q=$city&appid=$key&units=metric');
     final http.Response response = await client.get(url);
 
     if (response.statusCode == 200) {
@@ -49,7 +51,10 @@ class ForecastRemoteDatasourceImpl implements ForecastRemoteDatasource {
         final decoded = json.decode(response.body) as Map<String, dynamic>;
 
         final items = decoded["list"] as List<dynamic>;
-        return items.map((dynamic item) => ForecastModel.fromJson(item as Map<String, dynamic>)).toList();
+        return items
+            .map((dynamic item) =>
+                ForecastModel.fromJson(item as Map<String, dynamic>))
+            .toList();
       } catch (e) {
         throw DataException();
       }

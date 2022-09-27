@@ -1,4 +1,3 @@
-import 'package:weatherapp/core/exceptions.dart';
 import 'package:weatherapp/core/network.dart';
 import 'package:weatherapp/features/weather/data/datasources/forecast_local_datasource.dart';
 import 'package:weatherapp/features/weather/data/datasources/forecast_remote_datasource.dart';
@@ -30,7 +29,7 @@ class ForecastRepositoryImpl implements ForecastRepository {
 
   @override
   Future<List<Forecast>> getFiveDayForecast() async {
-    if (await network.isConnected() == false) {
+    if (await network.isConnected()) {
       final forecastModel = await remoteDatasource.getFiveDayForecast();
       localDatasource.cacheFiveDayForecast(forecastModel);
 
