@@ -1,43 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'package:weatherapp/features/weather/presentation/viewmodels/weather_screen_viewmodel.dart';
-
-import 'package:weatherapp/features/weather/presentation/widgets/widgets.dart';
+import 'package:weatherapp/core/injection_container.dart';
+import 'package:weatherapp/features/current_weather/presentation/current_weather.dart';
+import 'package:weatherapp/features/five_day_forecast/presentation/five_day_forecast.dart';
 
 class WeatherScreen extends StatelessWidget {
-  const WeatherScreen({Key? key}) : super(key: key);
+  const WeatherScreen({Key? key, required DiContainer diContainer})
+      : _diContainer = diContainer,
+        super(key: key);
+
+  final DiContainer _diContainer;
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<WeatherScreenViewModel>(context).fetchWeather();
-
-    final viewModelProvider = Provider.of<WeatherScreenViewModel>(context);
-
     return Container(
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          TopBar(lastUpdate: viewModelProvider.dateTime, error: viewModelProvider.currentError),
           Expanded(
-            child: Align(
-              alignment: Alignment.bottomLeft,
-              child: CurrentWeather(current: viewModelProvider.current),
-            ),
+            child: CurrentWeather(
+                currentWeatherBloc: _diContainer.currentWeatherBloc),
           ),
-          Container(
-            color: Colors.grey.shade100,
-            padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
-            child: const Text(
-              "5 Day Forecast",
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              )
-            ),
-          ),
-          FiveDayForecast(forecast: viewModelProvider.forecast, error: viewModelProvider.forecastError),
+          FiveDayForecast(
+              fiveDayForecastBloc: _diContainer.fiveDayForecastBloc),
         ],
       ),
     );

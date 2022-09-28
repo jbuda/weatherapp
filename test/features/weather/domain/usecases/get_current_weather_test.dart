@@ -1,12 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-
+import 'package:weatherapp/features/current_forecast/domain/usecases/get_current_weather.dart';
 import 'package:weatherapp/features/weather/domain/repositories/forecast_repository.dart';
-import 'package:weatherapp/features/weather/domain/usecases/get_current_weather.dart';
 
 import '../../../../test_data/models.dart' as tm;
 
-class MockForecastRepository extends Mock implements ForecastRepository { }
+class MockForecastRepository extends Mock implements ForecastRepository {}
 
 void main() {
   late GetCurrentWeather sut;
@@ -18,7 +17,8 @@ void main() {
   });
 
   test('should get forecast from the repository', () async {
-    when(() => mockForecastRepository.getCurrentForecast()).thenAnswer((_) async => tm.forecastModel);
+    when(() => mockForecastRepository.getCurrentForecast())
+        .thenAnswer((_) async => tm.forecastModel);
 
     final result = await sut();
 
