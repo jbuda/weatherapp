@@ -1,6 +1,6 @@
 # Weather App
 
-Flutter application using MVVM with a Clean Architecture approach.
+Flutter application using Bloc pattern with a Clean Architecture approach.
 
 ---
 
@@ -17,9 +17,6 @@ Flutter application using MVVM with a Clean Architecture approach.
 ### Bugs / Improvements / Features
 
 - Ability to change the City for lookup
-- Loader to indicate request in progress
-- Remove the `null` output on Exceptions
-- `null` appears briefly when data is first loading
-- Bigger suite ot unit tests and ui tests
+- Fix unit tests from initial Provider branch
 - Graphics / icons to represent weather types
-- Separate the ViewModel into two and use within the widgets
+- Handle exceptions in the UI
